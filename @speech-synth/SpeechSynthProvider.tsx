@@ -14,6 +14,7 @@ const SpeechSynthContext = createContext<SpeechSynthReturn>({
   stopSpeach: () => {},
   pauseSpeach: () => {},
   resumeSpeach: () => {},
+  selectVoice: (e: any) => {console.log(e)}
 })
 
 export function useSpeechSynthProvider() {
@@ -28,6 +29,7 @@ export function SpeechSynthProvider({ text, children }: SpeechSynthProps) {
     stopSpeach,
     pauseSpeach,
     resumeSpeach,
+    selectVoice,
   } = useSpeechSynth(text)
 
   return (
@@ -39,6 +41,7 @@ export function SpeechSynthProvider({ text, children }: SpeechSynthProps) {
         stopSpeach,
         pauseSpeach,
         resumeSpeach,
+        selectVoice,
       }}
     >
       {children}

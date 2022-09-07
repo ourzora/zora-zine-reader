@@ -12,6 +12,7 @@ export type SpeechSynthReturn = {
   stopSpeach: () => void
   pauseSpeach: () => void
   resumeSpeach: () => void
+  selectVoice: (e: any) => void
   speech: {
     synth: SpeechSynthesis
     voices: SpeechSynthesisVoice[]
@@ -35,7 +36,7 @@ export function useSpeechSynth(text?: any) {
     if(speech) {
       try {
         const ut = new SpeechSynthesisUtterance(text)
-        ut.voice = speech?.voices[4]
+        ut.voice = speech?.voices[10]
         ut.text = text.replace(/\n/g, '')
         ut.lang = 'en-US'
         ut.pitch = 0.8
@@ -65,11 +66,16 @@ export function useSpeechSynth(text?: any) {
     speech?.synth.resume()
   }, [utterance, speech])
 
+  const selectVoice = useCallback((e: any) => {
+    console.log(e)
+  }, [])
+
   return {
     startSpeach,
     stopSpeach,
     pauseSpeach,
     resumeSpeach,
+    selectVoice,
     speech,
     text
   }

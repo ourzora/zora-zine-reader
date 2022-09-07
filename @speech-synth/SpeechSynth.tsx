@@ -7,7 +7,8 @@ export function SpeechSynth({text = 'Hollo WURLd'}: {text?: string}) {
     text: textToSpeak,
     startSpeach,
     stopSpeach,
-    pauseSpeach
+    pauseSpeach,
+    selectVoice
   } = useSpeechSynth(text)
 
   useEffect(() => {
@@ -15,10 +16,17 @@ export function SpeechSynth({text = 'Hollo WURLd'}: {text?: string}) {
   }, [text])
 
   return (
-    <div className="flex gap-x-2.5">
-      <button className="bg-stone-200 px-6 py-2 rounded-full" onClick={startSpeach}>Play</button>
-      <button className="bg-stone-200 px-6 py-2 rounded-full" onClick={pauseSpeach}>Pause</button>
-      <button className="bg-stone-200 px-6 py-2 rounded-full" onClick={stopSpeach}>Clear</button>
+    <div className="flex gap-x-2.5 justify-between">
+      <div className="flex gap-x-2.5">
+        <button className="bg-stone-200 px-6 py-2 rounded-full" onClick={startSpeach}>Play</button>
+        <button className="bg-stone-200 px-6 py-2 rounded-full" onClick={pauseSpeach}>Pause</button>
+        <button className="bg-stone-200 px-6 py-2 rounded-full" onClick={stopSpeach}>Clear</button>
+      </div>
+      {speech?.voices &&
+        <select className="block w-full mt-1" onChange={selectVoice}>
+          {speech?.voices.map((item) => <option key={item.voiceURI}>{item.name}</option>)}
+        </select>
+      }
     </div>
   )
 }
