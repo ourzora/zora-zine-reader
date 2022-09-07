@@ -7,7 +7,19 @@ Outputꪵ
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 
-export function useSpeachSynth(text?: any) {
+export type SpeechSynthReturn = {
+  startSpeach: () => void,
+  stopSpeach: () => void
+  pauseSpeach: () => void
+  resumeSpeach: () => void
+  speech: {
+    synth: SpeechSynthesis
+    voices: SpeechSynthesisVoice[]
+  } | undefined
+  text: any
+}
+
+export function useSpeechSynth(text?: any) {
   const [utterance, setUtterance] = useState<any>()
 
   const speech = useMemo(() => {

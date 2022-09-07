@@ -8,7 +8,6 @@ import {
   SanityPostPreviewProps,
 } from '../lib/sanity'
 import { Reader } from 'components/Reader'
-import { TestReader } from 'components/TestReader'
 
 const BlogPage: React.FC<{
   recentPosts: SanityPostPreviewProps[]
@@ -32,14 +31,14 @@ const BlogPage: React.FC<{
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl">zine reader</h1>
+      <h1 className="text-2xl">zine.zora.co reader</h1>
       <hr className="my-4" />
       <select className="block w-full mt-1" onChange={handleSelect}>
         {posts.map((item) => <option value={item.slug.current} key={item._id}>{item.title}</option>)}
       </select>
       <hr className="my-4" />
-      {slug ? 
-        <Reader slug={slug} /> : <TestReader text="Hi i'm a reader" />
+      {slug && 
+        <Reader slug={slug} />
       }
     </div>
   )
