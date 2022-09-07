@@ -36,7 +36,7 @@ export function useSpeechSynth(text?: any) {
   useEffect(() => {
     if (typeof window !== 'undefined' && synth) {
       setSupported(true);
-      const getVoices = synth.getVoices()
+      const getVoices = window.speechSynthesis.getVoices()
       setVoices(getVoices)
     }
   }, [synth]);
