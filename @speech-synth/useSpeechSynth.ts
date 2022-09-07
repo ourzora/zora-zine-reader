@@ -27,19 +27,19 @@ export function useSpeechSynth(text?: any) {
   const [voiceIndex, setVoiceIndex] = useState(0)
   const [supported, setSupported] = useState(false)
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      setSupported(true);
-      const getVoices = window.speechSynthesis.getVoices()
-      setVoices(getVoices)
-    }
-  }, []);
-
   const synth = useMemo(() => {
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       return window.speechSynthesis
     }
   }, [])
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && synth) {
+      setSupported(true);
+      const getVoices = synth.getVoices()
+      setVoices(getVoices)
+    }
+  }, [synth]);
 
   useEffect(() => {
     if(synth && voices) {
@@ -51,8 +51,6 @@ export function useSpeechSynth(text?: any) {
         ut.pitch = 0.8
         ut.rate = .75
         ut.volume = 1
-
-        console.log(ut)
         setUtterance(ut)
       } catch (err) {
         console.error(err)
@@ -88,8 +86,8 @@ export function useSpeechSynth(text?: any) {
     resumeSpeach,
     selectVoice,
     speech: {
-      synth,
-      voices,
+      synth: synth,
+      voices: voices,
     },
     supported,
     text
