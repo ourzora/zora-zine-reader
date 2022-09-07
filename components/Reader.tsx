@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 export function Reader({
@@ -6,6 +6,7 @@ export function Reader({
 }: {
   slug?: string
 }) {
+  
   const { data } = useSWR(`/api/blog/${slug}`)
   
   useEffect(() => {
