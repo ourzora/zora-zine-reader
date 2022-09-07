@@ -15,7 +15,7 @@ export function Reader({
   }, [data])
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col">
       <Marquee
         speed={5}
         gradientWidth={50}
@@ -24,8 +24,10 @@ export function Reader({
           <pre>{JSON.stringify(data?.content, null, 2)}</pre>
         </code>
       </Marquee>
-      <hr className="my-4" />
-      <SpeechSynth text={data?.content} />
+      <div>
+        <hr className="my-4" />
+        <SpeechSynth text={data?.content} />
+      </div>
     </div>
   )
 }

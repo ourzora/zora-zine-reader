@@ -26,7 +26,7 @@ const BlogPage: React.FC<{
   }, [slug, setSlug])
 
   useEffect(() => {
-    setSlug(posts[0]?.slug?.current)
+    posts && setSlug(posts[0]?.slug?.current)
   }, [posts])
 
   return (

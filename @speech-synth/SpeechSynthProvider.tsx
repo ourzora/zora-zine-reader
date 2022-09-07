@@ -10,6 +10,7 @@ export type SpeechSynthProps = {
 const SpeechSynthContext = createContext<SpeechSynthReturn>({
   speech: undefined,
   text: undefined,
+  supported: false,
   startSpeach: () => {},
   stopSpeach: () => {},
   pauseSpeach: () => {},
@@ -23,6 +24,7 @@ export function useSpeechSynthProvider() {
 
 export function SpeechSynthProvider({ text, children }: SpeechSynthProps) {
   const {
+    supported,
     speech,
     text: textToSpeak,
     startSpeach,
@@ -35,6 +37,7 @@ export function SpeechSynthProvider({ text, children }: SpeechSynthProps) {
   return (
     <SpeechSynthContext.Provider
       value={{
+        supported,
         speech,
         text: textToSpeak,
         startSpeach,

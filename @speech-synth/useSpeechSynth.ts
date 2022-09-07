@@ -13,61 +13,72 @@ export type SpeechSynthReturn = {
   pauseSpeach: () => void
   resumeSpeach: () => void
   selectVoice: (e: any) => void
+  supported: boolean
   speech: {
-    synth: SpeechSynthesis
-    voices: SpeechSynthesisVoice[]
+    synth: SpeechSynthesis | undefined
+    voices: SpeechSynthesisVoice[] | undefined
   } | undefined
   text: any
 }
 
 export function useSpeechSynth(text?: any) {
   const [utterance, setUtterance] = useState<any>()
+  const [voices, setVoices] = useState<SpeechSynthesisVoice[] | undefined>()
+  const [voiceIndex, setVoiceIndex] = useState(0)
+  const [supported, setSupported] = useState(false)
 
-  const speech = useMemo(() => {
-    if (typeof window != "undefined") {
-      return {
-        synth: window.speechSynthesis,
-        voices: window.speechSynthesis.getVoices()
-      }
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      setSupported(true);
+      const getVoices = window.speechSynthesis.getVoices()
+      setVoices(getVoices)
+    }
+  }, []);
+
+  const synth = useMemo(() => {
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      return window.speechSynthesis
     }
   }, [])
 
   useEffect(() => {
-    if(speech) {
+    if(synth && voices) {
       try {
         const ut = new SpeechSynthesisUtterance(text)
-        ut.voice = speech?.voices[10]
+        ut.voice = voices[voiceIndex]
         ut.text = text.replace(/\n/g, '')
         ut.lang = 'en-US'
         ut.pitch = 0.8
         ut.rate = .75
         ut.volume = 1
+
+        console.log(ut)
         setUtterance(ut)
       } catch (err) {
         console.error(err)
       }
     }
-  }, [speech, text])
+  }, [synth, voices, text, voiceIndex])
 
   const startSpeach = useCallback(() => {
-    speech?.synth.cancel()
-    speech?.synth.speak(utterance)
-  }, [utterance, speech])
+    synth?.cancel()
+    synth?.speak(utterance)
+  }, [utterance, synth])
 
   const stopSpeach = useCallback(() => {
-    speech?.synth.cancel()
-  }, [utterance, speech])
+    synth?.cancel()
+  }, [utterance, synth])
 
   const pauseSpeach = useCallback(() => {
-    speech?.synth.pause()
-  }, [utterance, speech])
+    synth?.pause()
+  }, [utterance, synth])
 
   const resumeSpeach = useCallback(() => {
-    speech?.synth.resume()
-  }, [utterance, speech])
+    synth?.resume()
+  }, [utterance, synth])
 
   const selectVoice = useCallback((e: any) => {
-    console.log(e)
+    setVoiceIndex(parseInt(e?.target?.value))
   }, [])
 
   return {
@@ -76,7 +87,11 @@ export function useSpeechSynth(text?: any) {
     pauseSpeach,
     resumeSpeach,
     selectVoice,
-    speech,
+    speech: {
+      synth,
+      voices,
+    },
+    supported,
     text
   }
 }
