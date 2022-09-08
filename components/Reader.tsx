@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import useSWR from 'swr'
 import Marquee from "react-fast-marquee"
-import { SpeechSynth } from '@speech-synth'
+import { SpeechSynth } from '@derpyvision/react-speech-synth'
 
 export function Reader({
   slug
