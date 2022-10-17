@@ -1,16 +1,18 @@
-import useSWR from "swr"
+// import useSWR from "swr"
 import React from "react"
 import { useUberDuck } from "hooks/useUberDuck"
 import { RawDisplayer } from "./RawDisplayer"
 
-function Reader({speech}: {speech: string}) {
+function Reader({speech, voice}: {speech: string, voice?: any}) {
   const { 
     getUUID,
     uuid: uuid,
     getAsset,
     asset: asset,
-  } = useUberDuck({ speech: speech })
+  } = useUberDuck(speech, voice?.voicemodel_uuid)
   
+  console.log(voice)
+
   return (
     <div className="flex flex-col gap-4">
       <div className="p-2 border-[1px] rounded-xl flex flex-col gap-2">
@@ -21,7 +23,7 @@ function Reader({speech}: {speech: string}) {
         <button
           className="rounded-full bg-slate-200 m-auto px-4 py-2"
           onClick={getUUID}
-        >Get UUID</button>
+        >Get UUID | voice: {voice?.display_name}</button>
         <RawDisplayer data={{ uuid }} />
       </div>
       {uuid &&
@@ -43,39 +45,52 @@ export function AiReader({
 }: {
   slug?: string
 }) {
-  // const { data, isValidating } = useSWR(`/api/blog/${slug}`)
-  // if (isValidating) return <div>Loading...</div>
   const [copy, setCopy] = React.useState<string | undefined>(undefined)
+  const [voiceUUID, setVoiceUUID] = React.useState<string | undefined>(undefined)
   
+  const { voices, getVoices } = useUberDuck()
+
   const getArticle = React.useCallback(() => {
     async function fetchArticle() {
       const data = await fetch(`/api/blog/${slug}`)
         .then(response => response.json())
         .then(response => response)
         .catch(err => console.error(err));
-      console.log(data?.content)
       if (data?.content) setCopy(data?.content)
     }
     fetchArticle()
   }, [copy, setCopy, slug])
 
+  const handleSelect = React.useCallback((event: any) => {
+    
+    const voiceData = JSON.parse(event?.target?.value)
+    console.log(voiceData)
+    setVoiceUUID(voiceData)
+  }, [voiceUUID, setVoiceUUID])
+
   return (
-    <div className="p-2 border-[1px] rounded-xl flex flex-col gap-2">
-      <button
-        className="rounded-full bg-slate-200 m-auto px-4 py-2"
-        onClick={getArticle}
-      >Get Article</button>
-      {copy && <Reader speech={copy} />}
+    <div className="grid grid-cols-3 gap-6">
+      <div className="col-span-2 p-2 border-[1px] rounded-xl flex flex-col gap-2">
+        <button
+          className="rounded-full bg-slate-200 m-auto px-4 py-2"
+          onClick={getArticle}
+        >Get Article</button>
+        {copy && voiceUUID && <Reader speech={copy} voice={voiceUUID} />}
+      </div>
+      <div className="col-span-1 p-2 border-[1px] rounded-xl flex flex-col gap-2">
+        {voices
+          ? <div>
+              <span>Select a voice:</span>
+              <select className="block w-full mt-1" onChange={handleSelect}>
+                {voices.map((item: any) => <option value={JSON.stringify(item)} key={item.voicemodel_uuid}>{item.display_name}</option>)}
+              </select>
+            </div>
+          : <button
+              className="rounded-full bg-slate-200 m-auto px-4 py-2"
+              onClick={getVoices}
+            >Get Voices</button>
+        }
+      </div>
     </div>
   )
 }
-
-/*
-{
-  "failed_at": null,
-  "finished_at": "2022-10-17T19:27:56.065270",
-  "meta": null,
-  "path": "https://uberduck-audio-outputs.s3-us-west-2.amazonaws.com/9c014056-c98e-423c-9953-c827359e2c6a/audio.wav",
-  "started_at": "2022-10-17T19:27:43.142458"
-}
-*/
