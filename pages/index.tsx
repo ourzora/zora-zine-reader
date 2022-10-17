@@ -7,7 +7,7 @@ import {
   recentQuery,
   SanityPostPreviewProps,
 } from '../lib/sanity'
-import { Reader } from 'components/Reader'
+import { AiReader } from 'components/AiReader'
 
 const BlogPage: React.FC<{
   recentPosts: SanityPostPreviewProps[]
@@ -38,7 +38,7 @@ const BlogPage: React.FC<{
       </select>
       <hr className="my-4" />
       {slug && 
-        <Reader slug={slug} />
+        <AiReader slug={slug} />
       }
     </div>
   )
