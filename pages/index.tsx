@@ -7,7 +7,6 @@ import {
   recentQuery,
   SanityPostPreviewProps,
 } from '../lib/sanity'
-import { Reader } from 'components/Reader'
 import { AiReader } from 'components/AiReader'
 
 const BlogPage: React.FC<{
