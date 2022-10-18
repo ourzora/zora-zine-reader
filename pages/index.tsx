@@ -7,8 +7,7 @@ import {
   recentQuery,
   SanityPostPreviewProps,
 } from '../lib/sanity'
-import { useUberDuck } from 'hooks/useUberDuck'
-import { AiReader } from 'components/AiReader'
+import { UberDuckReader } from 'components/UberDuckReader'
 
 const BlogPage: React.FC<{
   recentPosts: SanityPostPreviewProps[]
@@ -30,12 +29,6 @@ const BlogPage: React.FC<{
     posts && setSlug(posts[0]?.slug?.current)
   }, [posts])
 
-  const { voices, getVoices } = useUberDuck()
-
-  useEffect(() => {
-    getVoices()
-  }, [])
-
   return (
     <div className="p-4">
       <h1 className="text-2xl">zine.zora.co reader</h1>
@@ -44,7 +37,7 @@ const BlogPage: React.FC<{
         {posts.map((item) => <option value={item.slug.current} key={item._id}>{item.title}</option>)}
       </select>
       <hr className="my-4" />
-      {slug && <AiReader slug={slug} voices={voices} />}
+      {slug && <UberDuckReader slug={slug} />}
     </div>
   )
 }
