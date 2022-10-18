@@ -1,19 +1,13 @@
-import { useEffect } from 'react'
 import useSWR from 'swr'
 import Marquee from "react-fast-marquee"
 import { SpeechSynth } from '@derpyvision/react-speech-synth'
 
-export function Reader({
+export function SpeechSynthReader({
   slug
 }: {
   slug?: string
 }) {
   const { data } = useSWR(`/api/blog/${slug}`)
-  
-  useEffect(() => {
-    console.log(slug, data)
-  }, [data])
-
   return (
     <div className="w-full flex flex-col">
       <Marquee

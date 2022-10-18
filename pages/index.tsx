@@ -7,7 +7,7 @@ import {
   recentQuery,
   SanityPostPreviewProps,
 } from '../lib/sanity'
-import { AiReader } from 'components/AiReader'
+import { UberDuckReader } from 'components/UberDuckReader'
 
 const BlogPage: React.FC<{
   recentPosts: SanityPostPreviewProps[]
@@ -37,9 +37,7 @@ const BlogPage: React.FC<{
         {posts.map((item) => <option value={item.slug.current} key={item._id}>{item.title}</option>)}
       </select>
       <hr className="my-4" />
-      {slug && 
-        <AiReader slug={slug} />
-      }
+      {slug && <UberDuckReader slug={slug} />}
     </div>
   )
 }
